@@ -1,57 +1,51 @@
+#! /opt/homebrew/bin/python3
+
 from bs4 import BeautifulSoup
 import requests
 
-def isInteresting(link):
-    # print(link)
-    # print(link.parent.name)
-    if(("role" in link.parent.attrs) and ("note" in link.parent.attrs["role"])):
+def isParenthesized(a_tag):
+    if a_tag.previous_sibling and a_tag.next_sibling:
+        if ('(' in a_tag.previous_sibling.string.strip()) and (')' in a_tag.next_sibling.string.strip()):
+            return True
+        else:
+            return False
+    else:
         return False
-    if("class" in link.attrs):
-        return False
-    # if(link.parent.name == "figcaption"):
-    #     return False
-    # if(link.parent.name != "p" and link.parent.name != "b"):
-    #     return False
-    return True
+    
+def isItalicized(a_tag):
+    return a_tag.parent.name in ['i', 'em']
 
+def hit(target):
+    url = 'https://en.wikipedia.org' + target
 
-r = requests.get('https://en.wikipedia.org/wiki/Special:Random')
-# r = requests.get('https://en.wikipedia.org/wiki/Lutz_Sch%C3%BClbe')
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html.parser')
 
-soup = BeautifulSoup(r.content, 'html.parser')
+    print(soup.title.text.split("-")[0].strip())
 
-artTitle = soup.title.text
+    main_content = soup.body.find(attrs={'class': 'mw-parser-output'})
 
-print(artTitle)
+    for element in main_content.select(".infobox"):
+      element.decompose()
 
-# get first link
-# contentLinks = soup.body.find("div", id="mw-content-text").find_all("a")
-# links = []
+    links = main_content.find_all("a")
 
-allp = soup.body.find("div", id="mw-content-text").find_all("p")
+    interestingLinks = []
 
-# print(allp)
+    for a in links:
+        if isItalicized(a):
+            continue
+        if isParenthesized(a):
+            continue
+        if (a.parent.name in ["p", "li"]):
+            # print(a.parent)
+            interestingLinks.append(a)
 
-thep = []
+    if(len(interestingLinks) > 0):
+       return interestingLinks[0]
+    else:
+       return None
 
-for p in allp:
-    if("class" in p.attrs and "mw-empty-elt" in p.attrs["class"]):
-        continue
-    thep.append(p)
-
-print(thep[0].a)
-
-# contentLinks = soup.body.find("div", id="mw-content-text").p.find_all("p")
-
-# print(soup.body.find("div", id="mw-content-text"))
-# links = []
-
-# for link in contentLinks:
-#     # print(link)
-#     if(isInteresting(link)):
-#         links.append(link)
-
-# if(len(links) == 0):
-#     print("No links found")
-# else:
-#     print(links[0])
+link = hit("/wiki/SET_Saxmundham_School")
+# link = hit("/wiki/Special:Random")
+print(link)
