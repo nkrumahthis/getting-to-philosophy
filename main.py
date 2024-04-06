@@ -5,6 +5,12 @@ import requests
 
 def isParenthesized(a_tag):
     if (a_tag.previous_sibling is not None) and (a_tag.next_sibling is not None):
+        if (a_tag.previous_sibling.string is None):
+            return False
+        elif a_tag.next_sibling.string is None:
+            return False
+        if ('(' == a_tag.previous_sibling.string.strip() or ')' == a_tag.next_sibling.string.strip()):
+            return True
         if ('(' in a_tag.previous_sibling.string.strip()) and (')' in a_tag.next_sibling.string.strip()):
             return True
         else:
@@ -14,12 +20,20 @@ def isParenthesized(a_tag):
 
 def isItalicized(a_tag):
     if(a_tag.parent != None):
-        return a_tag.parent.name in ['i', 'em']
+        if a_tag.parent.name in ['i', 'em']:
+            return True
+        elif "role" in a_tag.parent.attrs and a_tag.parent.attrs["role"] == "note":
+            return True
     return False
 
 def isContent(a_tag):
     if(a_tag.parent != None):
-        return (a_tag.parent.name in ["p", "li"])
+        return a_tag.parent.name == "p"
+    return False
+
+def isSelfLink(a_tag):
+    if a_tag.attrs is not None and "class" in a_tag.attrs and "selflink" in a_tag.attrs["class"]:
+        return True
     return False
 
 def hit(target):
@@ -44,19 +58,27 @@ def hit(target):
             continue
         if isParenthesized(a):
             continue
-        if isContent(a):
-            # print(a.parent)
-            interestingLinks.append(a)
+        if isSelfLink(a):
+            continue
+        if not isContent(a):
+            continue
+        if not "href" in a.attrs:
+            continue
+        interestingLinks.append(a)
 
     if(len(interestingLinks) > 0):
-       print(interestingLinks[0])
+    #    print(interestingLinks[0].parent)
        return interestingLinks[0].attrs["href"]
     else:
        return None
+    
+# link = hit("/wiki/Index_of_biology_articles")
+# print(link)
 
-# link = hit("/wiki/George_Frederic_Augustus_I")
-link = hit("/wiki/Special:Random")
-print(link)
+def scrape(target):
+    link = hit(target)
+    print(link)
+    scrape(link)
 
-def test_hit():
-    assert hit("/wiki/SET_Saxmundham_School") == "/wiki/Free_school_(England)"
+# scrape("/wiki/Special:Random")
+scrape("/wiki/Prudenci_Bertrana")
