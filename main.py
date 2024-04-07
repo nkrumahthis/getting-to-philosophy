@@ -9,9 +9,9 @@ def isParenthesized(a_tag):
             return False
         elif a_tag.next_sibling.string is None:
             return False
-        if ('(' == a_tag.previous_sibling.string.strip() or ')' == a_tag.next_sibling.string.strip()):
+        if '(' == a_tag.previous_sibling.string.strip() or ')' == a_tag.next_sibling.string.strip():
             return True
-        if ('(' in a_tag.previous_sibling.string.strip()) and (')' in a_tag.next_sibling.string.strip()):
+        if '(' in a_tag.previous_sibling.string.strip():
             return True
         else:
             return False
@@ -75,7 +75,7 @@ def hit(target):
     else:
        return None
     
-link = hit("/wiki/State_(polity)")
+link = hit("/wiki/Geography")
 print(link)
 
 def scrape(target):
@@ -84,4 +84,4 @@ def scrape(target):
     scrape(link)
 
 # scrape("/wiki/Special:Random")
-# scrape("/wiki/State_(polity)")
+# scrape("/wiki/Geography")
