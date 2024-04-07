@@ -75,8 +75,8 @@ def hit(target):
     else:
        return None
     
-link = hit("/wiki/Geography")
-print(link)
+# link = hit("/wiki/Geography")
+# print(link)
 
 def scrape(target):
     link = hit(target)
@@ -84,4 +84,4 @@ def scrape(target):
     scrape(link)
 
 # scrape("/wiki/Special:Random")
-# scrape("/wiki/Geography")
+scrape("/wiki/Geography")
