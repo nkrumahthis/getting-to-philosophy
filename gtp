@@ -46,6 +46,11 @@ def isSelfLink(a_tag):
         return True
     return False
 
+def isRedLink(a_tag):
+    if a_tag.attrs is not None and "class" in a_tag.attrs and "new" in a_tag.attrs["class"]:
+        return True
+    return False
+
 def hit(target):
     url = 'https://en.wikipedia.org' + target
 
@@ -77,6 +82,8 @@ def hit(target):
             continue
         if not "href" in a.attrs:
             continue
+        if isRedLink(a):
+            continue
         interestingLinks.append(a)
 
     if(len(interestingLinks) > 0):
@@ -105,4 +112,5 @@ def scrape(target):
 
 print("Exploring Wikipedia to reach Philosophy page...")
 print("Starting from a random Wikipedia article...\n")
-scrape("/wiki/Special:Random")
+# scrape("/wiki/Special:Random")
+scrape("/wiki/U.S._Securities_and_Exchange_Commission")
