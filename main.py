@@ -44,13 +44,15 @@ def hit(target):
 
     main_content = soup.body.find(attrs={'class': 'mw-body-content'}).find(attrs={'class': 'mw-parser-output'})
 
-    links = main_content.find_all("a")
-
     for element in main_content.select(".infobox"):
         element.decompose()
 
     for element in main_content.select(".sidebar"):
         element.decompose()
+
+    links = main_content.find_all("a")
+
+    # [print("-" + link.text) for link in links]
     
     interestingLinks = []
 
