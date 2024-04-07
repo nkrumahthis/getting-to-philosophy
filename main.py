@@ -3,15 +3,27 @@
 from bs4 import BeautifulSoup
 import requests
 
+def has_unclosed_parenthesis(s):
+    stack = []
+
+    for char in s:
+        if char == '(':
+            stack.append(char)
+        elif char == ')':
+            if not stack:
+                return True  # There is a closing parenthesis without a corresponding opening one
+            stack.pop()
+
+    return len(stack) > 0  # If there are remaining opening parentheses in the stack, it means they are unclosed
+
 def isParenthesized(a_tag):
     parent_text = a_tag.parent.get_text(strip=True)
     link_index = parent_text.find(a_tag.get_text(strip=True))     
 
     if link_index != -1:
         text_before = parent_text[:link_index]
-        text_after = parent_text[link_index + len(a_tag.get_text(strip=True)):]
 
-        if '(' in text_before and ')' in text_after:
+        if has_unclosed_parenthesis(text_before):
             return True
 
     return False
@@ -92,4 +104,4 @@ def scrape(target):
 
     scrape(link)
 
-scrape("/wiki/Special:Random")
+scrape("/wiki/Itata_incident")
