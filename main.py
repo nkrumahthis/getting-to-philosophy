@@ -70,17 +70,26 @@ def hit(target):
         interestingLinks.append(a)
 
     if(len(interestingLinks) > 0):
-    #    print(interestingLinks[0].parent)
        return interestingLinks[0].attrs["href"]
     else:
        return None
     
-# print(hit("/wiki/Philosophy"))
+hits = []
 
 def scrape(target):
     link = hit(target)
+
+    if(link == "/wiki/Philosophy"):
+        print("You have reached the wiki page for Philosophy!")
+        exit()
+
+    if(link in hits):
+        print("Hit a loop! Already hit " + link)
+        exit()
+
+    hits.append(link)
     print(link)
+
     scrape(link)
 
-# scrape("/wiki/Special:Random")
-scrape("/wiki/Philosophy")
+scrape("/wiki/Special:Random")
