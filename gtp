@@ -112,5 +112,4 @@ def scrape(target):
 
 print("Exploring Wikipedia to reach Philosophy page...")
 print("Starting from a random Wikipedia article...\n")
-# scrape("/wiki/Special:Random")
-scrape("/wiki/U.S._Securities_and_Exchange_Commission")
+scrape("/wiki/Special:Random")
