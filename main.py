@@ -52,7 +52,7 @@ def hit(target):
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'html.parser')
 
-    print(soup.title.text.split("-")[0].strip())
+    print("Exploring: " + soup.title.text.split("-")[0].strip())
 
     main_content = soup.body.find(attrs={'class': 'mw-body-content'}).find(attrs={'class': 'mw-parser-output'})
 
@@ -64,8 +64,6 @@ def hit(target):
 
     links = main_content.find_all("a")
 
-    # [print("-" + link.text) for link in links]
-    
     interestingLinks = []
 
     for a in links:
@@ -91,17 +89,20 @@ hits = []
 def scrape(target):
     link = hit(target)
 
-    if(link == "/wiki/Philosophy"):
-        print("You have reached the wiki page for Philosophy!")
+    if(link in hits):
+        print("Hit a loop! Already explored " + link)
         exit()
 
-    if(link in hits):
-        print("Hit a loop! Already hit " + link)
+    print("Following the first link: https://en.wikipedia.org" + link)
+
+    if(link == "/wiki/Philosophy"):
+        print("You have reached the Wikipedia page for Philosophy!")
         exit()
 
     hits.append(link)
-    print(link)
 
     scrape(link)
 
-scrape("/wiki/Itata_incident")
+print("Exploring Wikipedia to reach Philosophy page...")
+print("Starting from a random Wikipedia article...\n")
+scrape("/wiki/Special:Random")
