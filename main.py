@@ -11,7 +11,7 @@ def isParenthesized(a_tag):
             return False
         if '(' == a_tag.previous_sibling.string.strip() or ')' == a_tag.next_sibling.string.strip():
             return True
-        if '(' in a_tag.previous_sibling.string.strip():
+        if '(' in a_tag.previous_sibling.string.strip() or ')' in a_tag.next_sibling.string.strip():
             return True
         else:
             return False
@@ -75,8 +75,7 @@ def hit(target):
     else:
        return None
     
-# link = hit("/wiki/Geography")
-# print(link)
+# print(hit("/wiki/Philosophy"))
 
 def scrape(target):
     link = hit(target)
@@ -84,4 +83,4 @@ def scrape(target):
     scrape(link)
 
 # scrape("/wiki/Special:Random")
-scrape("/wiki/Geography")
+scrape("/wiki/Philosophy")
