@@ -51,6 +51,9 @@ def hit(target):
     for element in main_content.select(".infobox"):
         element.decompose()
 
+    for element in main_content.select(".sidebar"):
+        element.decompose()
+    
     interestingLinks = []
 
     for a in links:
@@ -72,8 +75,8 @@ def hit(target):
     else:
        return None
     
-# link = hit("/wiki/Index_of_biology_articles")
-# print(link)
+link = hit("/wiki/State_(polity)")
+print(link)
 
 def scrape(target):
     link = hit(target)
@@ -81,4 +84,4 @@ def scrape(target):
     scrape(link)
 
 # scrape("/wiki/Special:Random")
-scrape("/wiki/Prudenci_Bertrana")
+# scrape("/wiki/State_(polity)")
