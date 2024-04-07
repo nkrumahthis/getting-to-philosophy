@@ -4,19 +4,17 @@ from bs4 import BeautifulSoup
 import requests
 
 def isParenthesized(a_tag):
-    if (a_tag.previous_sibling is not None) and (a_tag.next_sibling is not None):
-        if (a_tag.previous_sibling.string is None):
-            return False
-        elif a_tag.next_sibling.string is None:
-            return False
-        if '(' == a_tag.previous_sibling.string.strip() or ')' == a_tag.next_sibling.string.strip():
+    parent_text = a_tag.parent.get_text(strip=True)
+    link_index = parent_text.find(a_tag.get_text(strip=True))     
+
+    if link_index != -1:
+        text_before = parent_text[:link_index]
+        text_after = parent_text[link_index + len(a_tag.get_text(strip=True)):]
+
+        if '(' in text_before and ')' in text_after:
             return True
-        if '(' in a_tag.previous_sibling.string.strip() or ')' in a_tag.next_sibling.string.strip():
-            return True
-        else:
-            return False
-    else:
-        return False
+
+    return False
 
 def isItalicized(a_tag):
     if(a_tag.parent != None):
