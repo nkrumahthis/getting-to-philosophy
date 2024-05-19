@@ -19,9 +19,17 @@ pip install -r requirements.txt
 ./gtp
 ```
 
+## UI
+
+```bash
+cd ui
+bun install
+bun run dev
+```
+
 ## Example
 
-```
+```text
 Exploring Wikipedia to reach Philosophy page...
 Starting from a random Wikipedia article...
 
