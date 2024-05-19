@@ -89,21 +89,3 @@ def hit(target):
     else:
        return None
     
-hits = []
-
-def scrape(target):
-    link = hit(target)
-
-    if(link in hits):
-        print("Hit a loop! Already explored " + link)
-        exit()
-
-    print("Following the first link: https://en.wikipedia.org" + link)
-
-    if(link == "/wiki/Philosophy"):
-        print("You have reached the Wikipedia page for Philosophy!")
-        exit()
-
-    hits.append(link)
-
-    scrape(link)
