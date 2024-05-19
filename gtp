@@ -1,8 +1,8 @@
 #! python
 
-import main
+import cli
 
 if( __name__ == "__main__" ):
     print("Exploring Wikipedia to reach Philosophy page...")
     print("Starting from a random Wikipedia article...\n")
-    main.scrape("/wiki/Special:Random")
+    cli.scrape("/wiki/Special:Random")
