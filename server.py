@@ -1,3 +1,4 @@
+import json
 import time
 from flask import Flask, Response
 import main
@@ -8,27 +9,32 @@ app = Flask(__name__)
 def hello_world():
     return "<h1>Welcome to Getting-to-Philosophy</h1><a href='/stream/'>Stream</a>"
 
-def scrape():
+def crawl():
     hits = []
     link = "/wiki/Special:Random"
 
     while True:
         link = main.hit(link)
-        yield("link " + link + "\n")
 
         if(link in hits):
-            yield "Hit a loop! Already explored " + link + "\n"
+            print("Hit a loop! Already explored " + link)
             break
 
         hits.append(link)
 
+        print("link " + link + "\n")
+        yield json.dumps({
+            'previous': hits[-1],
+            'next': link
+        })
+
         if(link == "/wiki/Philosophy"):
-            yield "You have reached the Wikipedia page for Philosophy!\n"
+            print( "You have reached the Wikipedia page for Philosophy!")
             break
 
-        yield "Following the first link: https://en.wikipedia.org" + link + "\n"
+        print( "Following the first link: https://en.wikipedia.org" + link)
 
 
 @app.route('/stream')
 def stream():
-    return Response(scrape(), mimetype="text/event-stream")
+    return Response(crawl(), mimetype="text/event-stream")
