@@ -15,17 +15,17 @@ interface Hit {
 function App() {
 
   const handleCrawl = () => {
+    const hits:Hit[] = []
+
     const eventSource = new EventSource(`${url}/stream`);
 
       eventSource.onmessage = (event) => {
         const newHit:Hit = JSON.parse(event.data);
-        setHits((prevHits:Hit[]) => { 
-          const updatedHits:Hit[] = [...prevHits, newHit]
-          const {newNodes, newEdges} = updateNodesAndEdges(updatedHits)
-          setNodes(newNodes)
-          setEdges(newEdges)
-          return updatedHits
-        });
+        hits.push(newHit)
+        const {newNodes, newEdges} = updateNodesAndEdges(hits)
+        setNodes(newNodes)
+        setEdges(newEdges)
+          
       };
 
       eventSource.onerror = (error) => {
@@ -34,7 +34,6 @@ function App() {
       };
   }
 
-  const [hits, setHits] = useState<Hit[]>([])
   const [nodes, setNodes] = useState<Node[]>([])
   const [edges, setEdges] = useState<Edge[]>([])
 
@@ -50,8 +49,6 @@ function App() {
       <div style={{ width: '100vw', height: '100vh' }}>
         <ReactFlow nodes={nodes} edges={edges} />
       </div>
-
-      {hits.map((hit) => (<p key={hit.current}>{JSON.stringify(hit)}</p>))}
 
     </div>
   )
