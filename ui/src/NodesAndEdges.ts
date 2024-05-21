@@ -15,7 +15,14 @@ export function updateNodesAndEdges(hits: Hit[]) : {newNodes: Node[], newEdges: 
     hits.forEach(hit => {
         
         if(!nodesMap.has(hit.previous)) {
-            const node: Node = {id: hit.previous, position: { x: Math.random() * 800, y: Math.random() * 800}, data: { label: hit.previous }}
+            const node: Node = {
+                id: hit.previous, 
+                position: { 
+                    x: Math.random() * 800, 
+                    y: Math.random() * 800
+                }, 
+                data: { label: hit.previous }
+            }
             nodesMap.set(hit.previous, node)
             newNodes.push(node)
         }
@@ -23,8 +30,10 @@ export function updateNodesAndEdges(hits: Hit[]) : {newNodes: Node[], newEdges: 
         if(!nodesMap.has(hit.current)) {
             const previousNode = nodesMap.get(hit.previous)
 
-            const newX = previousNode!.position.x + Math.random() * 100
-            const newY = previousNode!.position.y + Math.random() * 100
+            const randomOffset =  (Math.random() * 100) + 100
+            const randomBoolean = Math.random() < 0.5
+            const newX = previousNode!.position.x + (randomBoolean ? randomOffset : -randomOffset)
+            const newY = previousNode!.position.y + randomOffset
             
             const node: Node = {
                 id: hit.current, 
