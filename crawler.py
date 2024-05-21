@@ -12,7 +12,7 @@ def crawl():
         if(link in hits):
             print("Hit a loop! Already explored " + link)
             yield json.dumps({
-                'previous': hits[-1],
+                'previous': hits[-2] if len(hits) > 1 else hits[-1],
                 'current': link
             })
             break
@@ -21,7 +21,7 @@ def crawl():
 
         print("link " + link + "\n")
         yield json.dumps({
-            'previous': hits[-1],
+            'previous': hits[-2] if len(hits) > 1 else "/wiki/Special:Random",
             'current': link
         })
 
