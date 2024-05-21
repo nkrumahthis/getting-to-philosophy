@@ -1,17 +1,10 @@
 
 import { useState } from 'react';
 import './App.css'
-import ReactFlow from 'reactflow';
+import ReactFlow, {Node, Edge} from 'reactflow';
  
 import 'reactflow/dist/style.css';
- 
-const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-  { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-];
-
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-
+import { updateNodesAndEdges } from './NodesAndEdges';
 
 const url = 'http://localhost:5002';
 interface Hit {
@@ -26,7 +19,13 @@ function App() {
 
       eventSource.onmessage = (event) => {
         const newHit:Hit = JSON.parse(event.data);
-        setHits((prevHits) => [...prevHits, newHit]);
+        setHits((prevHits:Hit[]) => { 
+          const updatedHits:Hit[] = [...prevHits, newHit]
+          const {newNodes, newEdges} = updateNodesAndEdges(updatedHits)
+          setNodes(newNodes)
+          setEdges(newEdges)
+          return updatedHits
+        });
       };
 
       eventSource.onerror = (error) => {
@@ -36,6 +35,9 @@ function App() {
   }
 
   const [hits, setHits] = useState<Hit[]>([])
+  const [nodes, setNodes] = useState<Node[]>([])
+  const [edges, setEdges] = useState<Edge[]>([])
+
 
   return (
     <div className=''>
@@ -45,11 +47,12 @@ function App() {
       
       <button onClick={handleCrawl} className='px-4 py-1 border bg-blue-700 text-white rounded-full'>Crawl </button>
 
+      <div style={{ width: '100vw', height: '100vh' }}>
+        <ReactFlow nodes={nodes} edges={edges} />
+      </div>
+
       {hits.map((hit) => (<p key={hit.current}>{JSON.stringify(hit)}</p>))}
 
-      <div style={{ width: '100vw', height: '100vh' }}>
-        <ReactFlow nodes={initialNodes} edges={initialEdges} />
-      </div>
     </div>
   )
 }
