@@ -1,6 +1,16 @@
 
 import './App.css'
-import ReactFlow, {Node, Edge, addEdge, useNodesState, useEdgesState} from 'reactflow';
+import ReactFlow, {
+  Node, 
+  Edge, 
+  addEdge, 
+  useNodesState, 
+  useEdgesState,
+  MiniMap,
+  Controls,
+  Background,
+  BackgroundVariant
+} from 'reactflow';
  
 import 'reactflow/dist/style.css';
 import { createEdge, createNode, Hit } from './NodesAndEdges';
@@ -48,7 +58,11 @@ function App() {
           edges={edges} 
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
-        />
+        >
+          <Controls />
+          <MiniMap />
+          <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        </ReactFlow>
       </div>
 
     </div>
