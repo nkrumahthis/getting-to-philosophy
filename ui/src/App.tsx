@@ -46,11 +46,15 @@ function App() {
 
   return (
     <div className=''>
+      <div className='absolute'>
       <h1 className="text-xl">
         Getting to Philosophy!
       </h1>
       
-      <button onClick={handleCrawl} className='px-4 py-1 border bg-blue-700 text-white rounded-full'>Crawl </button>
+      <button onClick={handleCrawl} className='px-4 py-1 border bg-blue-700 text-white rounded-full'>
+        Crawl 
+      </button>
+      </div>
 
       <div style={{ width: '100vw', height: '100vh' }}>
         <ReactFlow 
