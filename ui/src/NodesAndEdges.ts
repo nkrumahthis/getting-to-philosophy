@@ -73,3 +73,13 @@ export function createNode(hit: Hit): Node{
     }
     return node
 }
+
+export function createEdge(hit: Hit): Edge{
+    const edge: Edge = {
+        id: `e${hit.previous}-${hit.current}`,
+        source: hit.previous,
+        target: hit.current
+    }
+
+    return edge
+}
