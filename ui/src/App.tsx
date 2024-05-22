@@ -1,10 +1,9 @@
 
-import { useState } from 'react';
 import './App.css'
-import ReactFlow, {Node, Edge} from 'reactflow';
+import ReactFlow, {Node, Edge, addEdge, useNodesState, useEdgesState} from 'reactflow';
  
 import 'reactflow/dist/style.css';
-import { updateNodesAndEdges } from './NodesAndEdges';
+import { createEdge, createNode } from './NodesAndEdges';
 
 const url = 'http://localhost:5002';
 interface Hit {
@@ -14,17 +13,22 @@ interface Hit {
 
 function App() {
 
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
   const handleCrawl = () => {
-    const hits:Hit[] = []
 
     const eventSource = new EventSource(`${url}/stream`);
 
       eventSource.onmessage = (event) => {
         const newHit:Hit = JSON.parse(event.data);
-        hits.push(newHit)
-        const {newNodes, newEdges} = updateNodesAndEdges(hits)
-        setNodes(newNodes)
-        setEdges(newEdges)
+
+        const newNode:Node = createNode(newHit)
+        const newEdge:Edge = createEdge(newHit)
+
+        // Add the new node and edge incrementally to the existing ones
+        setNodes((nds) => nds.some(node => node.id === newNode.id) ? nds : [...nds, newNode]);
+        setEdges((eds) => eds.some(edge => edge.id === newEdge.id) ? eds : addEdge(newEdge, eds));
           
       };
 
@@ -33,10 +37,6 @@ function App() {
         eventSource.close();
       };
   }
-
-  const [nodes, setNodes] = useState<Node[]>([])
-  const [edges, setEdges] = useState<Edge[]>([])
-
 
   return (
     <div className=''>
@@ -47,7 +47,12 @@ function App() {
       <button onClick={handleCrawl} className='px-4 py-1 border bg-blue-700 text-white rounded-full'>Crawl </button>
 
       <div style={{ width: '100vw', height: '100vh' }}>
-        <ReactFlow nodes={nodes} edges={edges} />
+        <ReactFlow 
+          nodes={nodes} 
+          edges={edges} 
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+        />
       </div>
 
     </div>
