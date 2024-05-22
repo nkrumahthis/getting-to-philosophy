@@ -61,3 +61,15 @@ export function updateNodesAndEdges(hits: Hit[]) : {newNodes: Node[], newEdges: 
 
 
 }
+
+export function createNode(hit: Hit): Node{
+    const node: Node = {
+        id: hit.previous, 
+        position: { 
+            x: Math.random() * 800, 
+            y: Math.random() * 800
+        }, 
+        data: { label: hit.previous }
+    }
+    return node
+}
