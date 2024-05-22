@@ -1,9 +1,9 @@
 import {Edge, Node} from 'reactflow';
 
-interface Hit {
+export interface Hit {
     previous: string,
     current: string
-  }
+}
 
 export function updateNodesAndEdges(hits: Hit[]) : {newNodes: Node[], newEdges: Edge[]} {
 

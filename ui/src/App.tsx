@@ -3,13 +3,9 @@ import './App.css'
 import ReactFlow, {Node, Edge, addEdge, useNodesState, useEdgesState} from 'reactflow';
  
 import 'reactflow/dist/style.css';
-import { createEdge, createNode } from './NodesAndEdges';
+import { createEdge, createNode, Hit } from './NodesAndEdges';
 
 const url = 'http://localhost:5002';
-interface Hit {
-  previous: string,
-  current: string
-}
 
 function App() {
 
