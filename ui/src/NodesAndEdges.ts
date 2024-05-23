@@ -32,8 +32,10 @@ export function updateNodesAndEdges(hits: Hit[]) : {newNodes: Node[], newEdges: 
 
             const randomOffset =  (Math.random() * 100) + 100
             const randomBoolean = Math.random() < 0.5
-            const newX = previousNode!.position.x + (randomBoolean ? randomOffset : -randomOffset)
-            const newY = previousNode!.position.y + randomOffset
+            const newX = previousNode ? 
+                previousNode.position.x + (randomBoolean ? randomOffset : -randomOffset) : Math.random() * 800
+            const newY = previousNode ? 
+                previousNode.position.y + randomOffset : Math.random() * 800
             
             const node: Node = {
                 id: hit.current, 
@@ -62,12 +64,20 @@ export function updateNodesAndEdges(hits: Hit[]) : {newNodes: Node[], newEdges: 
 
 }
 
-export function createNode(hit: Hit): Node{
+export function createNode(hit: Hit, previousNode?: Node): Node{
+
+    const randomOffset =  (Math.random() * 100) + 50
+    const randomBoolean = Math.random() < 0.5
+    const newX = previousNode ? 
+        previousNode.position.x + (randomBoolean ? randomOffset : -randomOffset) : Math.random() * 800
+    const newY = previousNode ? 
+        previousNode.position.y + randomOffset : Math.random() * 800
+
     const node: Node = {
         id: hit.previous, 
         position: { 
-            x: Math.random() * 800, 
-            y: Math.random() * 800
+            x: newX,
+            y: newY
         }, 
         data: { label: hit.previous }
     }

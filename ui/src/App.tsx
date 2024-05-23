@@ -26,34 +26,41 @@ function App() {
 
     const eventSource = new EventSource(`${url}/stream`);
 
-      eventSource.onmessage = (event) => {
-        const newHit:Hit = JSON.parse(event.data);
+    const nodeMap = new Map<string, Node>();
 
-        const newNode:Node = createNode(newHit)
-        const newEdge:Edge = createEdge(newHit)
+    eventSource.onmessage = (event) => {
+      const newHit:Hit = JSON.parse(event.data);
 
-        // Add the new node and edge incrementally to the existing ones
-        setNodes((nds) => nds.some(node => node.id === newNode.id) ? nds : [...nds, newNode]);
-        setEdges((eds) => eds.some(edge => edge.id === newEdge.id) ? eds : addEdge(newEdge, eds));
-          
-      };
+      let previousNode = nodeMap.get(newHit.previous)
 
-      eventSource.onerror = (error) => {
-        console.error('EventSource failed:', error);
-        eventSource.close();
-      };
+      if(!previousNode) previousNode = nodeMap.get("/wiki/Special:Random")
+
+      const newNode:Node = createNode(newHit, previousNode)
+      nodeMap.set(newHit.current, newNode)
+      const newEdge:Edge = createEdge(newHit)
+
+      // Add the new node and edge incrementally to the existing ones
+      setNodes((nds) => nds.some(node => node.id === newNode.id) ? nds : [...nds, newNode]);
+      setEdges((eds) => eds.some(edge => edge.id === newEdge.id) ? eds : addEdge(newEdge, eds));
+        
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('EventSource failed:', error);
+      eventSource.close();
+    };
   }
 
   return (
     <div className=''>
       <div className='absolute z-50'>
-      <h1 className="text-xl">
-        Getting to Philosophy!
-      </h1>
-      
-      <button onClick={handleCrawl} className='px-4 py-1 border bg-blue-700 text-white rounded-full'>
-        Crawl 
-      </button>
+        <h1 className="text-xl">
+          Getting to Philosophy!
+        </h1>
+        
+        <button onClick={handleCrawl} className='px-4 py-1 border bg-blue-700 text-white rounded-full'>
+          Crawl 
+        </button>
       </div>
 
       <div style={{ width: '90vw', height: '90vh' }}>
