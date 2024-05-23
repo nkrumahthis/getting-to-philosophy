@@ -71,7 +71,7 @@ export function createNode(hit: Hit, previousNode?: Node): Node{
     const newX = previousNode ? 
         previousNode.position.x + (randomBoolean ? randomOffset : -randomOffset) : Math.random() * 800
     const newY = previousNode ? 
-        previousNode.position.y + randomOffset : Math.random() * 800
+        previousNode.position.y + randomOffset : 100
 
     const node: Node = {
         id: hit.current, 

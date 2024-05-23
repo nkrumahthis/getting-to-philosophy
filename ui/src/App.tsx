@@ -31,9 +31,7 @@ function App() {
     eventSource.onmessage = (event) => {
       const newHit:Hit = JSON.parse(event.data);
 
-      let previousNode = nodeMap.get(newHit.previous)
-
-      if(!previousNode) previousNode = nodeMap.get("/wiki/Special:Random")
+      const previousNode = nodeMap.get(newHit.previous)
 
       const newNode:Node = createNode(newHit, previousNode)
       nodeMap.set(newHit.current, newNode)
