@@ -46,7 +46,7 @@ function App() {
 
   return (
     <div className=''>
-      <div className='absolute'>
+      <div className='absolute z-50'>
       <h1 className="text-xl">
         Getting to Philosophy!
       </h1>
@@ -56,7 +56,7 @@ function App() {
       </button>
       </div>
 
-      <div style={{ width: '100vw', height: '100vh' }}>
+      <div style={{ width: '90vw', height: '90vh' }}>
         <ReactFlow 
           nodes={nodes} 
           edges={edges} 
